@@ -1,0 +1,18 @@
+.ast .node {
+	width: 10px;
+	height: 10px;
+	border-radius: 50%;
+	margin-right: 3px;
+}
+
+.ast .node.attribute {
+    background: green;
+}
+
+.ast .node.array {
+    background: yellow;
+}
+
+.ast .node.object {
+    background: red;
+}

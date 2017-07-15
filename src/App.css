@@ -1,0 +1,8 @@
+.app .section {
+  float: left;
+  margin-right: 15px;
+}
+
+.app .section h2 {
+  font-weight: bold;
+}
