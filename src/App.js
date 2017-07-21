@@ -1,13 +1,11 @@
 import { Component } from 'react'
 import { js_beautify } from 'js-beautify'
-import { div, h2 } from 'njsx/react'
-import compile from 'wollok-js/compiler'
-import parser from 'wollok-js/parser'
+import { div, h2, button, text } from 'njsx/react'
+import { compiler, parser, linker } from 'wollok-js'
+import { wre } from 'wollok-js/wre'
 import editor from './editor'
 import ast from './ast'
 import './App.css'
-
-var linker = require('wollok-js/linker/linker')
 
 export default class App extends Component {
   constructor(props) {
@@ -24,13 +22,11 @@ export default class App extends Component {
   render() {
     let model = undefined
     let jsCode = ''
+    let result = ''
 
     try {
-      // model = link(parser.parse(this.state.code))
-      const parsedModel = parser.parse(this.state.code)
-      const linkedModel = linker.link(parsedModel)
-      model = linkedModel
-      jsCode = compile(model)
+      model = linker(parser(this.state.code))
+      jsCode = compiler(model)
     } catch (error) {
       jsCode = error.message
       model = undefined
@@ -61,6 +57,20 @@ export default class App extends Component {
       div.section(
         h2('AST:'),
         // ast(model)
+      ),
+
+      div.footer(
+        button('eval', {
+          onClick() {
+            try {
+              with (wre) { result = eval(jsCode) }
+            }
+            catch (error) {
+              result = 'Error: ' + error
+            }
+          }
+        }),
+        text[result.startsWith('Error') ? 'error' : 'ok'](result)
       )
     )()
   }

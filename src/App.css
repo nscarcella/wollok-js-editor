@@ -6,3 +6,30 @@
 .app .section h2 {
   font-weight: bold;
 }
+
+.app .footer {
+  float: left;
+  width: 100%;
+  margin-top: 20px;
+}
+
+.app .footer * {
+  float: left;
+  height: 40px;
+}
+
+.app .footer button {
+  width: 5%
+}
+
+.app .footer text {
+  width: 95%;
+}
+
+.app .footer text.ok {
+  background-color: green;
+}
+
+.app .footer text.error {
+  background-color: red;
+}
