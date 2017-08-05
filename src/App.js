@@ -37,7 +37,7 @@ export default class App extends Component {
             mode: "wollok",
             onChange: (code, event) => this.setState({ ...this.state, code }),
             value: this.state.code
-          })
+          }),
         ),
 
         div.section(
@@ -47,7 +47,7 @@ export default class App extends Component {
             highlightActiveLine: false,
             readOnly: true,
             value: js_beautify(jsCode),
-            style: { backgroundColor: model ? 'white' : 'indianred' }
+            style: { backgroundColor: model ? '#e6e6e6' : 'indianred' }
           })
         ),
 
