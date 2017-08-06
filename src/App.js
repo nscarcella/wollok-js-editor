@@ -1,6 +1,6 @@
 import { Component } from 'react'
 import { js_beautify } from 'js-beautify'
-import { div, h2, button, text, check } from 'njsx/react'
+import { div, h2, button, text } from 'njsx/react'
 import { compiler, parser, linker } from 'wollok-js'
 import { wre } from 'wollok-js/wre/lang.natives'
 import editor from './editor'
@@ -57,7 +57,8 @@ export default class App extends Component {
             div.controls(
               control('Methods', () => this.toggleView('method'), this.state.filter.method),
               control('Parent', () => this.toggleView('parent'), this.state.filter.parent),
-              control('Scope', () => this.toggleView('scope'), this.state.filter.scope)
+              control('Scope', () => this.toggleView('scope'), this.state.filter.scope),
+              control('Path', () => this.toggleView('path'), this.state.filter.path)
             )
           ),
           div.astPane(ast(model, this.state.filter))
