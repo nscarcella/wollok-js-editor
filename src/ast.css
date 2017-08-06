@@ -1,18 +1,25 @@
+/* avoid scrolls on each branch */
+.tree-view { overflow-y: unset !important; }
+
 .ast .node {
 	width: 10px;
 	height: 10px;
 	border-radius: 50%;
 	margin-right: 3px;
+  opacity: 0.3;
 }
 
-.ast .node.attribute {
-    background: green;
-}
+/* attributes with specific meaning */
+.ast .node.object.scope { background: #000090; }
+.ast .tree-view.object.scope .node { background: #000090; }
 
-.ast .node.array {
-    background: yellow;
-}
+.ast .node.array.errors { background: #900000; }
+.ast .tree-view.array.errors .node { background: #900000 !important; }
 
-.ast .node.object {
-    background: red;
+.ast .node.attribute { background: #414142; }
+.ast .node.array { background: yellow; }
+.ast .node.object { background: #009000; }
+
+.tree-view_item.object {
+    font-weight: bold;
 }

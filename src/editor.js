@@ -6,8 +6,9 @@ import 'brace/theme/textmate'
 import './editor.css'
 
 export default njsx(AceEditor)({
-    theme: "textmate",
-    fontSize: 18,
-    width: "600px",
+    theme: 'textmate',
+    fontSize: 12,
+    width: '350px',
+    height: '500px',
     editorProps: { $blockScrolling: Infinity }
 })

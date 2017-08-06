@@ -2,7 +2,7 @@ import { Component } from 'react'
 import { js_beautify } from 'js-beautify'
 import { div, h2, button, text } from 'njsx/react'
 import { compiler, parser, linker } from 'wollok-js'
-import { wre } from 'wollok-js/wre'
+import { wre } from 'wollok-js/wre/lang.natives'
 import editor from './editor'
 import ast from './ast'
 import './App.css'
@@ -11,12 +11,9 @@ export default class App extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      code: ''
+      code: '',
+      filter: {}
     }
-  }
-
-  shouldComponentUpdate(nextProps, nextState) {
-    return this.state.code !== nextState.code
   }
 
   render() {
@@ -33,37 +30,49 @@ export default class App extends Component {
     }
 
     return div.app(
-      div.section(
-        h2('Wollok:'),
-        editor({
-          mode: "wollok",
-          onChange: (code, event) => this.setState({ code }),
-          value: this.state.code,
-          style: { borderStyle: 'ridge' }
-        })
-      ),
+      div.center(
+        div.section(
+          h2('Wollok'),
+          editor({
+            mode: "wollok",
+            onChange: (code, event) => this.setState({ ...this.state, code }),
+            value: this.state.code
+          }),
+        ),
 
-      div.section(
-        h2('Compiled Javascript:'),
-        editor({
-          mode: "javascript",
-          highlightActiveLine: false,
-          readOnly: true,
-          value: js_beautify(jsCode),
-          style: { borderStyle: 'ridge', backgroundColor: model ? 'white' : 'indianred' }
-        })
-      ),
+        div.section(
+          h2('Compiled Javascript'),
+          editor({
+            mode: "javascript",
+            highlightActiveLine: false,
+            readOnly: true,
+            value: js_beautify(jsCode),
+            style: { backgroundColor: model ? '#e6e6e6' : 'indianred' }
+          })
+        ),
 
-      div.section(
-        h2('AST:'),
-        // ast(model)
+        div.section(
+          div.header(
+            h2('AST'),
+            div.controls(
+              control('Methods', () => this.toggleView('method'), this.state.filter.method),
+              control('Parent', () => this.toggleView('parent'), this.state.filter.parent),
+              control('Scope', () => this.toggleView('scope'), this.state.filter.scope),
+              control('Path', () => this.toggleView('path'), this.state.filter.path)
+            )
+          ),
+          div.astPane(ast(model, this.state.filter))
+        ),
       ),
-
+      
       div.footer(
         button('eval', {
           onClick() {
             try {
-              with (wre) { result = eval(jsCode) }
+              function doEval(wre) {
+                return eval(jsCode)
+              }
+              result = doEval(wre)
             }
             catch (error) {
               result = 'Error: ' + error
@@ -74,4 +83,18 @@ export default class App extends Component {
       )
     )()
   }
+
+  toggleView(type) {
+    this.setState({ 
+      ...this.state,
+      filter: {
+        ...this.state.filter,
+        [type]: !this.state.filter[type]
+      }
+    })
+  }
 }
+
+const control = (label, onClick, enabled) => div.controlsItem(
+  text(label, { onClick, className: enabled ? 'on' : 'off' })
+)
